@@ -71,8 +71,7 @@ public class DetoxCommand implements CommandExecutor {
 
 		if (sender instanceof Player && ((Player) sender).getUniqueId().equals(uuid)) {
 			// Z don't remove this or I'll cry.
-			sender.sendMessage(Detox.getColor(1)
-					+ "Think you're funny or something? Fuck you. Like seriously, fuck off. I worked FUCKING hard on keeping this FUCKING server friendly and you think you can go and try to fuck around with it like some child? Absolutely disgusting. Please don't detox me... I'm just a wittle baby pwugin...");
+			sender.sendMessage(Detox.getColor(1) + "You can't mark yourself, stupid...");
 			return true;
 		}
 
