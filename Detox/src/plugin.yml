@@ -1,0 +1,9 @@
+name: Detox
+author: Theeef
+version: 1.0
+main: com.Theeef.me.Detox
+api-version: 1.13
+commands:
+  detox:
+    usage: /detox
+    description: Toggle visiblity of messages from toxic players.
