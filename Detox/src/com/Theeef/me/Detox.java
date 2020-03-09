@@ -65,8 +65,6 @@ public class Detox extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void playerTalk(AsyncPlayerChatEvent event) {
-		ChatColor color = isToxic(event.getPlayer()) ? getColor(2) : ChatColor.WHITE;
-		event.setFormat(color + "<" + ChatColor.WHITE + "%s" + color + "> " + ChatColor.WHITE + "%s");
 		UUID uuid = event.getPlayer().getUniqueId();
 		List<Player> list = getOnlineToxic();
 		list.addAll(getOnlineNotDetoxed());
