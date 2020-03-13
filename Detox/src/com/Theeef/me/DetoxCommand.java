@@ -69,7 +69,8 @@ public class DetoxCommand implements CommandExecutor {
 			return true;
 		}
 
-		if (sender instanceof Player && ((Player) sender).getUniqueId().equals(uuid)) {
+		if (sender instanceof Player && ((Player) sender).getUniqueId().equals(uuid)
+				&& !Detox.isToxic((Player) sender)) {
 			// Z don't remove this or I'll cry.
 			sender.sendMessage(Detox.getColor(1) + "You can't mark yourself, stupid...");
 			return true;
