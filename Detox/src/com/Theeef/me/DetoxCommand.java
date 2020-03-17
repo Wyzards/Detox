@@ -14,6 +14,8 @@ import net.md_5.bungee.api.ChatColor;
 
 public class DetoxCommand implements CommandExecutor {
 
+	public static Detox plugin = Detox.getPlugin(Detox.class);
+
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command arg1, @NotNull String arg2,
 			@NotNull String[] args) {
@@ -63,16 +65,21 @@ public class DetoxCommand implements CommandExecutor {
 
 		String reason = args.length == 1 ? null : "";
 		UUID uuid = Detox.getUUID(args[0]);
+		Player marked = plugin.getServer().getPlayer(uuid);
 
 		if (uuid == null) {
 			sender.sendMessage(Detox.getColor(1) + args[0] + " has never played on the server before!");
 			return true;
 		}
 
+		if (marked != null && marked.hasPermission("detox.admin")) {
+			sender.sendMessage(ChatColor.RED + "That user cannot be marked as toxic!");
+			return true;
+		}
+
 		if (sender instanceof Player && ((Player) sender).getUniqueId().equals(uuid)
 				&& !Detox.isToxic((Player) sender)) {
-			// Z don't remove this or I'll cry.
-			sender.sendMessage(Detox.getColor(1) + "You can't mark yourself, stupid...");
+			sender.sendMessage(Detox.getColor(1) + "You can't mark yourself.");
 			return true;
 		}
 
@@ -84,19 +91,30 @@ public class DetoxCommand implements CommandExecutor {
 		Detox.markAsToxic(uuid, sender, reason);
 
 		if (Detox.isToxic(uuid)) {
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-					Detox.cc(2) + Detox.getName(uuid) + Detox.cc(1) + " has been marked as toxic"
-							+ (reason == null ? "." : " for '" + Detox.cc(2) + reason + Detox.cc(1) + "'.")
-							+ " Other players have been informed."));
-
-			for (Player player : Bukkit.getOnlinePlayers())
-				if (!(sender instanceof Player) || (!((Player) sender).getUniqueId().equals(player.getUniqueId())
-						&& !player.getUniqueId().equals(uuid)))
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (player.getUniqueId().equals(uuid))
+					continue;
+				if (player.hasPermission("detox.admin"))
+					player.sendMessage(Detox.getColor(2) + Detox.getName(uuid) + Detox.getColor(1)
+							+ " has been marked as toxic by " + Detox.getColor(2) + sender.getName() + Detox.getColor(1)
+							+ (reason == null ? "" : " for '" + Detox.getColor(2) + reason + Detox.getColor(1) + "'")
+							+ ". Other players have been informed.");
+				else
 					player.sendMessage(Detox.getColor(2) + Detox.getName(uuid) + Detox.getColor(1)
 							+ " has been marked as toxic. Their messages are now hidden from chat. To see their and other toxic player's messages, use /detox.");
-		} else
+			}
+		} else {
 			sender.sendMessage(
 					Detox.getColor(2) + Detox.getName(uuid) + Detox.getColor(1) + " is no longer marked as toxic.");
+
+			for (Player player : Bukkit.getOnlinePlayers())
+				if (player.hasPermission("detox.admin")
+						&& (!(sender instanceof Player) || !((Player) sender).equals(player)))
+					player.sendMessage(Detox.getColor(2) + sender.getName() + Detox.getColor(1) + " has removed "
+							+ Detox.getColor(2) + Detox.getName(uuid) + "'s" + Detox.getColor(1)
+							+ " mark of toxicity.");
+
+		}
 		return true;
 	}
 }
