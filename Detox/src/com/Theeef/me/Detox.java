@@ -140,7 +140,6 @@ public class Detox extends JavaPlugin implements Listener {
 		String date = plugin.getConfig().getString("users." + uuid + ".toxic.date");
 		String reason = plugin.getConfig().getString("users." + uuid + ".toxic.reason");
 
-		meta.setOwningPlayer(plugin.getServer().getOfflinePlayer(uuid));
 		meta.setDisplayName(getColor(1) + getName(uuid));
 		List<String> lore = Lists.newArrayList(getColor(2) + "Marked By: " + name, getColor(2) + "Date: " + date);
 		if (reason != null)
