@@ -30,6 +30,12 @@ public class DetoxCommand implements CommandExecutor {
 
 			boolean inModeratedChat = Detox.isDetoxed(player);
 
+			if (Detox.isToxic(player)) {
+				player.sendMessage(Detox.getColor(1)
+						+ "You've been marked as toxic by staff. Because of this, you may not exit the unmoderated chat. Appeal on discord.");
+				return true;
+			}
+
 			if (inModeratedChat)
 				player.sendMessage(Detox.getColor(1) + "You can now see the messages of "
 						+ (Detox.getOnlineToxic().size() + Detox.getOnlineNotDetoxed().size())
