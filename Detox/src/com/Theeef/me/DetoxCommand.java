@@ -27,14 +27,20 @@ public class DetoxCommand implements CommandExecutor {
 			}
 
 			Player player = (Player) sender;
+
+			boolean inModeratedChat = Detox.isDetoxed(player);
+
+			if (inModeratedChat)
+				player.sendMessage(Detox.getColor(1) + "You can now see the messages of "
+						+ (Detox.getOnlineToxic().size() + Detox.getOnlineNotDetoxed().size())
+						+ " players in the unmoderated chat. Your messages are now hidden in moderated chat.");
+
 			Detox.detox(player, !Detox.isDetoxed(player));
 
-			if (Detox.isDetoxed(player))
+			if (!inModeratedChat)
 				player.sendMessage(Detox.getColor(1) + "You can no longer see the messages of "
-						+ Detox.getOnlineToxic().size() + " toxic players online.");
-			else
-				player.sendMessage(Detox.getColor(1) + "You can now see the messages of "
-						+ Detox.getOnlineToxic().size() + " toxic players online.");
+						+ (Detox.getOnlineToxic().size() + Detox.getOnlineNotDetoxed().size())
+						+ " players in the unmoderated chat.");
 			return true;
 		}
 

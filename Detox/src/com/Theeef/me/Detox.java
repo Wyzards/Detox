@@ -69,14 +69,26 @@ public class Detox extends JavaPlugin implements Listener {
 		List<Player> list = getOnlineToxic();
 		list.addAll(getOnlineNotDetoxed());
 
-		if (isToxic(uuid))
+		if (isToxic(uuid) || !isDetoxed(uuid)) {
 			event.getRecipients().retainAll(list);
+			event.setFormat(ChatColor.DARK_GREEN + "[Detox] " + ChatColor.RESET + event.getFormat());
+		}
 	}
 
 	@EventHandler
 	public void playerJoin(PlayerJoinEvent event) {
-		if (!updateUser(event.getPlayer()))
+		if (!updateUser(event.getPlayer())) {
 			detox(event.getPlayer().getUniqueId(), true);
+			event.getPlayer()
+					.sendMessage(ChatColor.AQUA + "Welcome to the server! Please read /rules before you begin!");
+		}
+
+		if (!isDetoxed(event.getPlayer()))
+			event.getPlayer().sendMessage(getColor(1)
+					+ "You are currently in the unmoderated (detoxed) chat. Feel free to be toxic. Note that only other detoxed players can see your messages.");
+		else
+			event.getPlayer().sendMessage(getColor(1)
+					+ "You are currently in the moderated chat. No toxicity please. If you'd like to be toxic, enter detoxed chat with /detox");
 
 		if (isToxic(event.getPlayer()))
 			toxicMessage(event.getPlayer().getUniqueId());
@@ -219,6 +231,9 @@ public class Detox extends JavaPlugin implements Listener {
 			plugin.getConfig().set("users." + uuid + ".toxic.reason", reason);
 			plugin.getConfig().set("users." + uuid + ".toxic.date", (new Date()).toString());
 			plugin.getConfig().set("users." + uuid + ".toxic.markedBy", sender.getName());
+
+			if (!isDetoxed(uuid))
+				detox(uuid, false);
 		}
 
 		plugin.saveConfig();
@@ -235,9 +250,10 @@ public class Detox extends JavaPlugin implements Listener {
 		if (player.isOnline()) {
 			if (isToxic(player.getPlayer()))
 				player.getPlayer()
-						.sendMessage(ChatColor.translateAlternateColorCodes('&', cc(1) + "You've been marked as toxic"
-								+ (reason == null ? "" : " for '" + cc(2) + reason + cc(1) + "'")
-								+ ". Players with /detox enabled will no longer see your messages. " + appealMessage));
+						.sendMessage(ChatColor.translateAlternateColorCodes('&',
+								cc(1) + "You've been marked as toxic"
+										+ (reason == null ? "" : " for '" + cc(2) + reason + cc(1) + "'")
+										+ ". Only players in detox chat can see your messages. " + appealMessage));
 			else
 				player.getPlayer().sendMessage(getColor(1) + "You are no longer marked as toxic.");
 		}
