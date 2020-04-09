@@ -123,8 +123,6 @@ public class Detox extends JavaPlugin implements Listener {
 	}
 
 	public static void constructToxicList(Player player, int page) {
-		System.out.println("TOXIC PAGE: " + page);
-
 		List<UUID> list = getToxic();
 		Inventory inventory = player.getServer().createInventory(null, 9 * 6, "Toxic Players");
 
