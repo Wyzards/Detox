@@ -80,16 +80,16 @@ public class Detox extends JavaPlugin implements Listener {
 		if (!updateUser(event.getPlayer()))
 			detox(event.getPlayer().getUniqueId(), true);
 
-		if (isToxic(event.getPlayer()))
-			toxicMessage(event.getPlayer().getUniqueId());
-		else {
-			if (!isDetoxed(event.getPlayer()))
-				event.getPlayer().sendMessage(getColor(1)
-						+ "You are currently in the unmoderated (detoxed) chat. Feel free to be toxic. Note that only other detoxed players can see your messages.");
-			else
-				event.getPlayer().sendMessage(getColor(1)
-						+ "You are currently in the moderated chat. No toxicity please. If you'd like to be toxic, enter detoxed chat with /detox");
-		}
+		/*
+		 * if (isToxic(event.getPlayer()))
+		 * toxicMessage(event.getPlayer().getUniqueId()); else { if
+		 * (!isDetoxed(event.getPlayer()))
+		 * event.getPlayer().sendMessage(getColor(1) +
+		 * "You are currently in the unmoderated (detoxed) chat. Feel free to be toxic. Note that only other detoxed players can see your messages."
+		 * ); else event.getPlayer().sendMessage(getColor(1) +
+		 * "You are currently in the moderated chat. No toxicity please. If you'd like to be toxic, enter detoxed chat with /detox"
+		 * ); }
+		 */
 	}
 
 	@EventHandler
