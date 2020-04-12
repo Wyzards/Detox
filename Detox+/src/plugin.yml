@@ -1,0 +1,12 @@
+name: DetoxPlus
+author: Theeef
+version: 1.0
+main: com.Theeef.me.DetoxPlus
+api-version: 1.13
+commands:
+  detox:
+    usage: /detox help
+    description: Central command for managing rule-breaking players.
+  d:
+    usage: /d <message>
+    description: Send a message to detox chat
