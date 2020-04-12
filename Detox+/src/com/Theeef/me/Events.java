@@ -1,22 +1,48 @@
 package com.Theeef.me;
 
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class Events implements Listener {
+
+	public static DetoxPlus plugin = DetoxPlus.getPlugin(DetoxPlus.class);
+
+	@EventHandler
+	public void processCommand(PlayerCommandPreprocessEvent event) {
+		if (!event.getMessage().contains(" ") || !DetoxPlus.isDetoxed(event.getPlayer()))
+			return;
+
+		List<String> list = Lists.newArrayList("whisper", "w", "msg", "r", "reply");
+		String message = event.getMessage();
+		String command = message.substring(1, message.contains(" ") ? message.indexOf(" ") : message.length())
+				.toLowerCase();
+		String recipient = message.substring(message.indexOf(" ") + 1, StringUtils.ordinalIndexOf(message, " ", 2) != -1
+				? StringUtils.ordinalIndexOf(message, " ", 2) : message.length() - 1);
+		UUID uuid = UserData.getUUID(recipient);
+
+		if (list.contains(command) && uuid != null && !DetoxPlus.detoxVisible(uuid)) {
+			event.getPlayer().sendMessage(DetoxPlus.baseColor()
+					+ "You've been marked as toxic, and the player you're trying to message has toxic messages disabled.");
+			event.setCancelled(true);
+		}
+	}
 
 	@EventHandler
 	public void clickDetoxList(InventoryClickEvent event) {
@@ -85,7 +111,8 @@ public class Events implements Listener {
 			event.setFormat(ChatColor.DARK_GREEN + "[Unmoderated] " + ChatColor.RESET + event.getFormat());
 		}
 
-		if (!DetoxPlus.isDetoxed(event.getPlayer()) && DetoxPlus.detoxVisible(event.getPlayer()))
-			event.setFormat(event.getFormat().replace("%1$s", "%1$s" + ChatColor.GREEN + "*" + ChatColor.RESET));
+		if (plugin.getConfig().getBoolean("detoxStar"))
+			if (!DetoxPlus.isDetoxed(event.getPlayer()) && DetoxPlus.detoxVisible(event.getPlayer()))
+				event.setFormat(event.getFormat().replace("%1$s", "%1$s" + ChatColor.GREEN + "*" + ChatColor.RESET));
 	}
 }

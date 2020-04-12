@@ -120,9 +120,6 @@ public class DetoxCommand implements CommandExecutor, TabCompleter {
 		List<String> list = Lists.newArrayList(DetoxPlus.getDetoxed());
 		Inventory inventory = player.getServer().createInventory(null, 9 * 6, "Detoxed Players");
 
-		for (String string : list)
-			player.sendMessage(string);
-
 		for (int i = (page - 1) * 45; i < page * 45; i++) {
 
 			if (i >= list.size())
