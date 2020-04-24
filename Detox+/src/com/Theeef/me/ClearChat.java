@@ -13,7 +13,8 @@ public class ClearChat implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] arg3) {
 		if (sender.hasPermission("detox.clearchat"))
 			for (Player player : Bukkit.getOnlinePlayers())
-				player.sendMessage("");
+				for (int i = 0; i < 100; i++)
+					player.sendMessage("");
 		else
 			sender.sendMessage(ChatColor.RED + "Insufficient Permissions");
 		return true;

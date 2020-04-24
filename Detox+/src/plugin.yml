@@ -10,3 +10,6 @@ commands:
   d:
     usage: /d <message>
     description: Send a message to detox chat
+  clearchat:
+    usage: /clearchat
+    description: Clear the chat
