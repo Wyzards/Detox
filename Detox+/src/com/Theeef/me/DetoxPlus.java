@@ -29,6 +29,7 @@ public class DetoxPlus extends JavaPlugin implements Listener {
 
 		getServer().getPluginCommand("detox").setExecutor(new DetoxCommand());
 		getServer().getPluginCommand("d").setExecutor(new DetoxCommand());
+		getServer().getPluginCommand("clearchat").setExecutor(new ClearChat());
 	}
 
 	public static Set<String> getDetoxed() {
